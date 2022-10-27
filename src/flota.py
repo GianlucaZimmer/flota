@@ -1,6 +1,6 @@
 import pickle
 import re
-
+import os
 import torch
 from transformers import AutoTokenizer
 
@@ -12,7 +12,8 @@ class FlotaTokenizer:
         self.strict = strict
         self.mode = mode
         self.tok = AutoTokenizer.from_pretrained(model, model_max_length=512)
-        with open('vocabs/{}.p'.format(model), 'rb') as f:
+        path = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(path,'vocabs', model) + ".p", 'rb') as f:
             self.vocab = pickle.load(f)
         assert len(self.vocab) == self.tok.vocab_size
         if self.model == 'bert-base-cased' or self.model == 'bert-base-uncased':
